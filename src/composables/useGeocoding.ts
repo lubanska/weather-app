@@ -1,5 +1,5 @@
 import type { LocationGeocodingData } from '@/types'
-import { computed, ref, watchEffect, type Ref } from 'vue'
+import { computed, ref, watch, type Ref } from 'vue'
 
 export const useGeocoding = (query: Ref<string>) => {
   const data = ref<null | any>(null)
@@ -7,7 +7,9 @@ export const useGeocoding = (query: Ref<string>) => {
   const isLoading = ref<boolean>(true)
 
   const locationData = computed<LocationGeocodingData[] | null>(() => {
-    if (!data.value) return null
+    if (!data.value || !data.value.results) return null
+
+    console.log(data.value.results)
 
     return data.value.results.map((result: Record<string, string | number | string[]>) => {
       return {
@@ -16,8 +18,8 @@ export const useGeocoding = (query: Ref<string>) => {
         admin: result.admin1,
         lat: result.latitude,
         long: result.longitude,
-        title: `${result.name}, ${result.admin1}, ${result.country}`,
-        value: result.id,
+        title: [result.name, result.admin1, result.country].filter(Boolean).join(', '),
+        value: result.id.toString(),
       }
     })
   })
@@ -51,8 +53,21 @@ export const useGeocoding = (query: Ref<string>) => {
     }
   }
 
-  watchEffect(() => {
-    fetchData()
+  // Debounce logic
+  let timeoutId: number | null = null
+  watch(query, (newQuery) => {
+    // Only trigger search if the query has 3 or more characters
+    if (newQuery.length >= 3) {
+      // If a timeout exists, clear it
+      if (timeoutId !== null) {
+        clearTimeout(timeoutId)
+      }
+
+      // Set a new timeout to delay the fetch call
+      timeoutId = setTimeout(() => {
+        fetchData()
+      }, 500) // 500ms debounce delay
+    }
   })
 
   return { locationData, error, isLoading }
