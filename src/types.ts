@@ -23,3 +23,13 @@ export interface WeatherApiParsedResponse {
   current: CurrentWeather
   daily: DailyWeather[]
 }
+
+export interface LocationGeocodingData {
+  name: string
+  country: string
+  admin: string
+  lat: number
+  long: number
+  title: string
+  value: string
+}

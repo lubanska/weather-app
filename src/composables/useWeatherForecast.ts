@@ -1,8 +1,8 @@
 import type { CurrentWeather, DailyWeather, WeatherApiParsedResponse } from '@/types'
 import { getWeatherIcon } from '@/utils/getWeatherIcon'
-import { computed, ref, watchEffect } from 'vue'
+import { computed, ref, watchEffect, type Ref } from 'vue'
 
-export const useWeatherForecast = (lat: number, long: number) => {
+export const useWeatherForecast = (lat: Ref<number>, long: Ref<number>) => {
   const data = ref<null | any>(null)
   const error = ref<null | string>(null)
   const isLoading = ref<boolean>(true)
@@ -31,7 +31,7 @@ export const useWeatherForecast = (lat: number, long: number) => {
     }))
 
     return {
-      location: data.value.timezone,
+      location: data.value.timezone.replace('_', ' '),
       tempUnit: data.value.current_units.temperature_2m,
       windUnit: data.value.current_units.wind_speed_10m,
       pressureUnit: data.value.current_units.surface_pressure,
@@ -42,8 +42,6 @@ export const useWeatherForecast = (lat: number, long: number) => {
 
   const endpoint = 'https://api.open-meteo.com/v1/forecast'
   const params = new URLSearchParams({
-    latitude: lat.toString(),
-    longitude: long.toString(),
     current: 'temperature_2m,is_day,weather_code,surface_pressure,wind_speed_10m',
     daily:
       'weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,precipitation_probability_max',
@@ -62,7 +60,10 @@ export const useWeatherForecast = (lat: number, long: number) => {
     error.value = null
 
     try {
-      const response = await fetch(`${endpoint}?${params}`, options)
+      const response = await fetch(
+        `${endpoint}?latitude=${lat.value}&longitude=${long.value}&${params}`,
+        options,
+      )
 
       if (!response.ok) {
         throw new Error(`Network response was not ok: ${response.statusText}`)
