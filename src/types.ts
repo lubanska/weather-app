@@ -26,8 +26,6 @@ export interface WeatherApiParsedResponse {
 
 export interface LocationGeocodingData {
   name: string
-  country: string
-  admin: string
   lat: number
   long: number
   title: string

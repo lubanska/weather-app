@@ -5,27 +5,23 @@ import { ref } from 'vue'
 
 const emits = defineEmits(['update:coords'])
 
-// bind the value of the autocmplete to the ref
-const coordinates = ref({ lat: 0, long: 0 })
+const coordinates = ref({ name: '', lat: 0, long: 0 })
 
-// bind the user input to the ref
-const searchQuery = ref<string>('Berlin')
+const searchQuery = ref<string>('')
 
-const { locationData, error, isLoading } = useGeocoding(searchQuery)
+const { locationData } = useGeocoding(searchQuery)
 
 const handleModel = (value: LocationGeocodingData | null) => {
   if (value) {
-    coordinates.value = { lat: value.lat, long: value.long }
+    coordinates.value = { name: value.title, lat: value.lat, long: value.long }
   } else {
-    coordinates.value = { lat: 0, long: 0 }
+    coordinates.value = { name: '', lat: 0, long: 0 }
   }
 
   emits('update:coords', coordinates.value)
 }
 
 const handleSearch = (value: string | null) => {
-  console.log('search', value)
-
   searchQuery.value = value ?? ''
 }
 </script>
@@ -35,8 +31,12 @@ const handleSearch = (value: string | null) => {
     <v-autocomplete
       clearable
       return-object
+      auto-select-first
+      no-filter
       label="Autocomplete"
       :items="locationData ?? []"
+      item-title="title"
+      item-value="value"
       @update:model-value="handleModel($event)"
       @update:search="handleSearch($event)"
     ></v-autocomplete>

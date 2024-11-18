@@ -9,13 +9,9 @@ export const useGeocoding = (query: Ref<string>) => {
   const locationData = computed<LocationGeocodingData[] | null>(() => {
     if (!data.value || !data.value.results) return null
 
-    console.log(data.value.results)
-
     return data.value.results.map((result: Record<string, string | number | string[]>) => {
       return {
         name: result.name,
-        country: result.country,
-        admin: result.admin1,
         lat: result.latitude,
         long: result.longitude,
         title: [result.name, result.admin1, result.country].filter(Boolean).join(', '),

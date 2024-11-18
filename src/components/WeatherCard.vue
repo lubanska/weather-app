@@ -4,6 +4,7 @@ import { ref } from 'vue'
 
 export interface Props {
   weatherData: WeatherApiParsedResponse
+  name: string
 }
 
 defineProps<Props>()
@@ -13,8 +14,9 @@ const expand = ref<boolean>(false)
 
 <template>
   <v-card class="mx-auto" max-width="368">
-    <v-card-item :title="weatherData.location">
+    <v-card-item :title="name">
       <template v-slot:subtitle>
+        {{ weatherData.location }}
         <v-icon
           v-if="weatherData.current.isDay"
           class="me-1 pb-1"
