@@ -45,6 +45,7 @@ export const useWeatherForecast = (lat: Ref<number>, long: Ref<number>) => {
     current: 'temperature_2m,is_day,weather_code,surface_pressure,wind_speed_10m',
     daily:
       'weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,precipitation_probability_max',
+    forecast_days: '3',
     timezone: 'auto',
   })
   const options = {
