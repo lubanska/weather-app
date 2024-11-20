@@ -29,22 +29,22 @@ export const useWeatherForecast = () => {
       weatherIcon: getWeatherIcon(current.weather_code),
       conditions: [
         {
-          condition: 'windSpeed',
+          condition: 'Wind speed',
           icon: 'mdi-weather-windy',
           value: current.wind_speed_10m + data.value.current_units.wind_speed_10m,
         },
         {
-          condition: 'rainChance',
+          condition: 'Rain chance',
           icon: 'mdi-weather-pouring',
           value: daily.precipitation_probability_max[0] + '%',
         },
         {
-          condition: 'uvIndex',
+          condition: 'UV index',
           icon: 'mdi-sun-wireless',
           value: daily.uv_index_max[0],
         },
         {
-          condition: 'surfacePressure',
+          condition: 'Surface pressure',
           icon: 'mdi-gauge',
           value: current.surface_pressure + data.value.current_units.surface_pressure,
         },

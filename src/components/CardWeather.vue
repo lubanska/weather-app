@@ -26,16 +26,23 @@ const expand = ref<boolean>(false)
         {{ weatherData.current.temp }}{{ weatherData.tempUnit }}
       </v-col>
 
-      <v-col class="text-start" cols="5" sm="auto">
-        <v-list-item
+      <v-col class="text-start d-flex flex-column" cols="6" sm="auto">
+        <v-tooltip
           v-for="condition in weatherData.current.conditions"
           density="compact"
-          :prepend-icon="condition.icon"
+          :title="condition.condition"
+          :text="condition.condition"
         >
-          <v-list-item-subtitle>
-            {{ condition.value }}
-          </v-list-item-subtitle>
-        </v-list-item>
+          <template v-slot:activator="{ props }">
+            <v-btn
+              class="bg-transparent justify-sm-start text-medium-emphasis text-body-2"
+              flat
+              v-bind="props"
+              :prepend-icon="condition.icon"
+              >{{ condition.value }}</v-btn
+            >
+          </template>
+        </v-tooltip>
       </v-col>
     </v-row>
 
