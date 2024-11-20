@@ -50,27 +50,27 @@ const expand = ref<boolean>(false)
     </v-row>
 
     <v-expand-transition>
-      <div v-if="expand" class="mt-4">
+      <div v-if="expand" class="mt-4 text-center">
         <v-divider></v-divider>
 
-        <v-item-group>
-          <v-container class="mx-auto d-flex flex-wrap justify-center align-center">
-            <v-card
-              v-for="(item, index) in weatherData.daily"
-              :key="item.day"
-              width="130"
-              align="center"
-              flat
-            >
-              <v-card-title class="text-overline">{{ item.day }}</v-card-title>
-              <v-icon :icon="item.weatherIcon" size="24"></v-icon>
-              <v-card-text class="text-caption">
-                <strong> {{ item.tempMax }}° </strong>
-                {{ item.tempMin }}°
-              </v-card-text>
-            </v-card>
-          </v-container>
-        </v-item-group>
+        <v-container
+          class="mx-auto d-flex flex-column flex-sm-row flex-wrap justify-center align-center"
+        >
+          <v-card
+            v-for="(item, index) in weatherData.daily"
+            :key="item.day"
+            width="130"
+            align="center"
+            flat
+          >
+            <v-card-title class="text-overline">{{ item.day }}</v-card-title>
+            <v-icon :icon="item.weatherIcon" size="24"></v-icon>
+            <v-card-text class="text-caption">
+              <strong> {{ item.tempMax }}° </strong>
+              {{ item.tempMin }}°
+            </v-card-text>
+          </v-card>
+        </v-container>
       </div>
     </v-expand-transition>
   </div>

@@ -1,12 +1,9 @@
 import type { CurrentWeather, DailyWeather, WeatherApiParsedResponse } from '@/types'
 import { getWeatherIcon } from '@/utils/getWeatherIcon'
-import { computed, ref, watchEffect, type Ref } from 'vue'
+import { computed, watchEffect, type Ref } from 'vue'
+import { useFetch } from './useFetch'
 
 export const useWeatherForecast = (lat: Ref<number>, long: Ref<number>) => {
-  const data = ref<null | any>(null)
-  const error = ref<null | string>(null)
-  const isLoading = ref<boolean>(true)
-
   const weatherData = computed<WeatherApiParsedResponse | null>(() => {
     if (!data.value) return null
 
@@ -58,6 +55,8 @@ export const useWeatherForecast = (lat: Ref<number>, long: Ref<number>) => {
     }
   })
 
+  const { data, error, isLoading, fetchData } = useFetch<any>()
+
   const endpoint = 'https://api.open-meteo.com/v1/forecast'
   const params = new URLSearchParams({
     current: 'temperature_2m,is_day,weather_code,surface_pressure,wind_speed_10m',
@@ -74,30 +73,8 @@ export const useWeatherForecast = (lat: Ref<number>, long: Ref<number>) => {
     },
   }
 
-  const fetchData = async () => {
-    isLoading.value = true
-    error.value = null
-
-    try {
-      const response = await fetch(
-        `${endpoint}?latitude=${lat.value}&longitude=${long.value}&${params}`,
-        options,
-      )
-
-      if (!response.ok) {
-        throw new Error(`Network response was not ok: ${response.statusText}`)
-      }
-
-      data.value = await response.json()
-    } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Unknown error occurred'
-    } finally {
-      isLoading.value = false
-    }
-  }
-
   watchEffect(() => {
-    fetchData()
+    fetchData(`${endpoint}?latitude=${lat.value}&longitude=${long.value}&${params}`, options)
   })
 
   return { weatherData, error, isLoading }

@@ -1,7 +1,5 @@
 - skeleton loader
 - grey icons in forecast
-- highlight today forecast
-- get forecast for NEXT days not today
 - clear up vuetify
 - day/night component with theme change
 - unify the design around components

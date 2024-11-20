@@ -1,11 +1,8 @@
 import type { LocationGeocodingData } from '@/types'
-import { computed, ref, watch, type Ref } from 'vue'
+import { computed, watch, type Ref } from 'vue'
+import { useFetch } from './useFetch'
 
 export const useGeocoding = (query: Ref<string>) => {
-  const data = ref<null | any>(null)
-  const error = ref<null | string>(null)
-  const isLoading = ref<boolean>(true)
-
   const locationData = computed<LocationGeocodingData[] | null>(() => {
     if (!data.value || !data.value.results) return null
 
@@ -20,6 +17,8 @@ export const useGeocoding = (query: Ref<string>) => {
     })
   })
 
+  const { data, error, isLoading, fetchData } = useFetch<any>()
+
   const endpoint = 'https://geocoding-api.open-meteo.com/v1/search'
   const params = new URLSearchParams({
     count: '10',
@@ -28,25 +27,6 @@ export const useGeocoding = (query: Ref<string>) => {
   })
   const options = {
     method: 'GET',
-  }
-
-  const fetchData = async () => {
-    isLoading.value = true
-    error.value = null
-
-    try {
-      const response = await fetch(`${endpoint}?name=${query.value}&${params}`, options)
-
-      if (!response.ok) {
-        throw new Error(`Network response was not ok: ${response.statusText}`)
-      }
-
-      data.value = await response.json()
-    } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Unknown error occurred'
-    } finally {
-      isLoading.value = false
-    }
   }
 
   // Debounce logic
@@ -61,7 +41,7 @@ export const useGeocoding = (query: Ref<string>) => {
 
       // Set a new timeout to delay the fetch call
       timeoutId = setTimeout(() => {
-        fetchData()
+        fetchData(`${endpoint}?name=${query.value}&${params}`, options)
       }, 500) // 500ms debounce delay
     }
   })
