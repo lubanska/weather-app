@@ -17,10 +17,28 @@ export const useWeatherForecast = (lat: Ref<number>, long: Ref<number>) => {
       isDay: current.is_day === 1,
       temp: current.temperature_2m,
       weatherIcon: getWeatherIcon(current.weather_code),
-      windSpeed: current.wind_speed_10m,
-      rainChance: daily.precipitation_probability_max[0],
-      uvIndex: daily.uv_index_max[0],
-      surfacePressure: current.surface_pressure,
+      conditions: [
+        {
+          condition: 'windSpeed',
+          icon: 'mdi-weather-windy',
+          value: current.wind_speed_10m + data.value.current_units.wind_speed_10m,
+        },
+        {
+          condition: 'rainChance',
+          icon: 'mdi-weather-pouring',
+          value: daily.precipitation_probability_max[0] + '%',
+        },
+        {
+          condition: 'uvIndex',
+          icon: 'mdi-sun-wireless',
+          value: daily.uv_index_max[0],
+        },
+        {
+          condition: 'surfacePressure',
+          icon: 'mdi-gauge',
+          value: current.surface_pressure + data.value.current_units.surface_pressure,
+        },
+      ],
     }
 
     const dailyWeather: DailyWeather[] = daily.time.map((day: string, index: number) => ({
@@ -36,7 +54,7 @@ export const useWeatherForecast = (lat: Ref<number>, long: Ref<number>) => {
       windUnit: data.value.current_units.wind_speed_10m,
       pressureUnit: data.value.current_units.surface_pressure,
       current: currentWeather,
-      daily: dailyWeather,
+      daily: dailyWeather.slice(1),
     }
   })
 
@@ -45,7 +63,7 @@ export const useWeatherForecast = (lat: Ref<number>, long: Ref<number>) => {
     current: 'temperature_2m,is_day,weather_code,surface_pressure,wind_speed_10m',
     daily:
       'weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,precipitation_probability_max',
-    forecast_days: '3',
+    forecast_days: '4',
     timezone: 'auto',
   })
   const options = {

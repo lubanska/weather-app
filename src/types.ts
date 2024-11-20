@@ -2,10 +2,13 @@ export interface CurrentWeather {
   isDay: boolean
   temp: number
   weatherIcon: string
-  windSpeed: number
-  rainChance: number
-  uvIndex: number
-  surfacePressure: number
+  conditions: WeatherCondition[]
+}
+
+export interface WeatherCondition {
+  condition: string
+  icon: string
+  value: string
 }
 
 export interface DailyWeather {
