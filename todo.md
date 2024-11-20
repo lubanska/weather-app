@@ -1,9 +1,9 @@
-- cool colors
-- split components and folder structure
+- add footer with links
 - readme
 - playwright
-- deploy + resolve errors
-- add footer with links
+- resolve the any in composables / use zod
+- add automatic imports
+- split components and folder structure
 
 possible in the future:
 

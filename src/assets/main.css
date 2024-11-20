@@ -1,0 +1,42 @@
+body {
+  background: linear-gradient(-45deg, #ffcf47, #ff9647, #ff5252, #ffd152);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+  height: 100vh;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.v-theme--light,
+.v-theme--dark {
+  background-color: transparent !important;
+}
+
+/* Sunny Day
+background: linear-gradient(-45deg, #ffcf47, #ff9647, #ff5252, #ffd152);
+
+Rainy Day
+background: linear-gradient(-45deg, #4a90e2, #2d5c9f, #72c6ef, #4db6f7);
+
+Cloudy Day
+background: linear-gradient(-45deg, #b0bec5, #90a4ae, #cfd8dc, #a7b8c3);
+
+Night Gradients:
+Sunny Night
+background: linear-gradient(-45deg, #d28728, #c35428, #a82f2f, #d89f47);
+
+Rainy Night
+background: linear-gradient(-45deg, #243c58, #1b2d42, #3d5a78, #273b54);
+
+Cloudy Night
+background: linear-gradient(-45deg, #4e5964, #394452, #6e7681, #4a5461); */
