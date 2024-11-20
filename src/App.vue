@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Main from '@/components/Main.vue'
+import MainBody from '@/components/MainBody.vue'
 import NavigationBar from './components/NavigationBar.vue'
 import { useWeatherForecast } from './composables/useWeatherForecast'
 
@@ -10,6 +10,6 @@ const { weatherData } = useWeatherForecast()
   <v-app :theme="weatherData?.current.isDay ? 'light' : 'dark'">
     <NavigationBar />
 
-    <Main />
+    <MainBody />
   </v-app>
 </template>

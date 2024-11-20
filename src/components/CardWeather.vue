@@ -30,6 +30,7 @@ const expand = ref<boolean>(false)
         <v-tooltip
           v-for="condition in weatherData.current.conditions"
           density="compact"
+          :key="condition.condition"
           :title="condition.condition"
           :text="condition.condition"
         >
