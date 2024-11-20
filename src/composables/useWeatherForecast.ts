@@ -1,9 +1,22 @@
-import type { CurrentWeather, DailyWeather, WeatherApiParsedResponse } from '@/types'
+import type {
+  CurrentWeather,
+  DailyWeather,
+  LocationCoords,
+  WeatherApiParsedResponse,
+} from '@/types'
 import { getWeatherIcon } from '@/utils/getWeatherIcon'
-import { computed, watchEffect, type Ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useFetch } from './useFetch'
 
-export const useWeatherForecast = (lat: Ref<number>, long: Ref<number>) => {
+const { data, error, isLoading, fetchData } = useFetch<any>()
+
+const coords = ref<LocationCoords>({
+  name: 'Copenhagen, Capital Region, Denmark',
+  lat: 55.67594,
+  long: 12.56553,
+})
+
+export const useWeatherForecast = () => {
   const weatherData = computed<WeatherApiParsedResponse | null>(() => {
     if (!data.value) return null
 
@@ -55,8 +68,6 @@ export const useWeatherForecast = (lat: Ref<number>, long: Ref<number>) => {
     }
   })
 
-  const { data, error, isLoading, fetchData } = useFetch<any>()
-
   const endpoint = 'https://api.open-meteo.com/v1/forecast'
   const params = new URLSearchParams({
     current: 'temperature_2m,is_day,weather_code,surface_pressure,wind_speed_10m',
@@ -73,9 +84,20 @@ export const useWeatherForecast = (lat: Ref<number>, long: Ref<number>) => {
     },
   }
 
-  watchEffect(() => {
-    fetchData(`${endpoint}?latitude=${lat.value}&longitude=${long.value}&${params}`, options)
-  })
+  const updateCoords = (newCoords: LocationCoords) => {
+    coords.value = newCoords
+  }
 
-  return { weatherData, error, isLoading }
+  watch(
+    coords,
+    async (newCoords) => {
+      await fetchData(
+        `${endpoint}?latitude=${newCoords.lat}&longitude=${newCoords.long}&${params}`,
+        options,
+      )
+    },
+    { immediate: true },
+  )
+
+  return { weatherData, coords, error, isLoading, updateCoords }
 }

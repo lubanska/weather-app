@@ -1,27 +1,25 @@
 <script setup lang="ts">
 import { useGeocoding } from '@/composables/useGeocoding'
+import { useWeatherForecast } from '@/composables/useWeatherForecast'
+
 import type { LocationGeocodingData } from '@/types'
 import { ref } from 'vue'
 
-const emits = defineEmits(['update:coords'])
-
-const coordinates = ref({ name: '', lat: 0, long: 0 })
 const searchQuery = ref<string>('')
 
 const { locationData } = useGeocoding(searchQuery)
+const { updateCoords } = useWeatherForecast()
 
 const handleModel = (value: LocationGeocodingData | null) => {
   if (value) {
-    coordinates.value = { name: value.title, lat: value.lat, long: value.long }
+    updateCoords({ name: value.title, lat: value.lat, long: value.long })
   } else {
-    coordinates.value = {
+    updateCoords({
       name: 'Copenhagen, Capital Region, Denmark',
       lat: 55.67594,
       long: 12.56553,
-    }
+    })
   }
-
-  emits('update:coords', coordinates.value)
 }
 
 const handleSearch = (value: string | null) => {

@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import Header from '@/components/Header.vue'
 import Main from '@/components/Main.vue'
+import NavigationBar from './components/NavigationBar.vue'
+import { useWeatherForecast } from './composables/useWeatherForecast'
+
+const { weatherData } = useWeatherForecast()
 </script>
 
 <template>
-  <header>
-    <Header />
-  </header>
+  <v-app :theme="weatherData?.current.isDay ? 'light' : 'dark'">
+    <NavigationBar />
 
-  <main>
     <Main />
-  </main>
+  </v-app>
 </template>

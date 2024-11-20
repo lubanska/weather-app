@@ -6,6 +6,8 @@ export const useFetch = <T>() => {
   const isLoading = ref<boolean>(false)
 
   const fetchData = async (url: string, options: RequestInit = {}) => {
+    if (isLoading.value) return
+
     isLoading.value = true
     error.value = null
 

@@ -34,3 +34,9 @@ export interface LocationGeocodingData {
   title: string
   value: string
 }
+
+export interface LocationCoords {
+  name: string
+  lat: number
+  long: number
+}

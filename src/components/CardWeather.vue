@@ -1,10 +1,10 @@
-<script lang="ts" setup>
-import type { WeatherApiParsedResponse } from '@/types'
+<script setup lang="ts">
+import type { LocationCoords, WeatherApiParsedResponse } from '@/types'
 import { ref } from 'vue'
 
-export interface Props {
+interface Props {
   weatherData: WeatherApiParsedResponse
-  name: string
+  coords: LocationCoords
 }
 
 defineProps<Props>()
@@ -16,12 +16,12 @@ const expand = ref<boolean>(false)
   <div>
     <v-row>
       <v-col align="center">
-        <div class="text-overline">{{ name }}</div>
+        <div class="text-overline">{{ coords.name }}</div>
         <div class="text-caption">{{ weatherData.location }}</div>
       </v-col>
     </v-row>
 
-    <v-row align="center" justify="center" class="text-center">
+    <v-row align="center" class="text-center justify-center">
       <v-col class="text-h1" cols="12" sm="auto">
         {{ weatherData.current.temp }}{{ weatherData.tempUnit }}
       </v-col>
@@ -57,9 +57,9 @@ const expand = ref<boolean>(false)
           class="mx-auto d-flex flex-column flex-sm-row flex-wrap justify-center align-center"
         >
           <v-card
-            v-for="(item, index) in weatherData.daily"
+            v-for="item in weatherData.daily"
             :key="item.day"
-            width="130"
+            class="w-130 bg-transparent"
             align="center"
             flat
           >
