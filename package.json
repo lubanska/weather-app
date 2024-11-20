@@ -11,7 +11,9 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
     "lint": "eslint . --fix",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "build-docker-image": "docker build -t weather-app .",
+    "run-docker-container": "docker run -p 8080:8080 --rm weather-app"
   },
   "dependencies": {
     "vue": "^3.5.12",
