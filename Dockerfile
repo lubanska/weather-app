@@ -1,5 +1,5 @@
 # Use Node.js Alpine as the base image
-FROM node:lts-alpine
+FROM mcr.microsoft.com/playwright:v1.48.2-focal
 
 # Set working directory
 WORKDIR /app
@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci
+RUN npm ci && npx playwright install --with-deps
 
 # Copy the rest of the application code
 COPY . .

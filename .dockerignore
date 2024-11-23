@@ -20,5 +20,4 @@ dist/
 README.md
 
 # Build tools
-package-lock.json
 Dockerfile

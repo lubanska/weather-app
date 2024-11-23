@@ -13,7 +13,9 @@
     "lint": "eslint . --fix",
     "format": "prettier --write src/",
     "build-docker-image": "docker build -t weather-app .",
-    "run-docker-container": "docker run -p 8080:8080 --rm weather-app"
+    "run-docker-container": "docker run -p 8080:8080 --rm weather-app",
+    "test:e2e:docker": "run-p serve-and-test --",
+    "serve-and-test": "npm run preview & npx playwright test"
   },
   "dependencies": {
     "vue": "^3.5.12",

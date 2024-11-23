@@ -55,7 +55,7 @@ npm install
 npm run dev
 ```
 
-For running the project in the Docker container:
+For running the project in the Docker container, first make sure Docker daemon is running. Then:
 
 ```bash
 # Build Docker image
