@@ -18,7 +18,7 @@ export interface DailyWeather {
   tempMin: number
 }
 
-export interface WeatherApiParsedResponse {
+export interface OpenMeteoParsedResponse {
   location: string
   tempUnit: string
   windUnit: string

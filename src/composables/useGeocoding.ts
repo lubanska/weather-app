@@ -1,12 +1,14 @@
-import type { LocationGeocodingData } from '@/types'
+import type { LocationGeocodingData } from '@/types/appTypes'
+import type { GeocodingResponse } from '@/types/responseTypes'
 import { computed, watch, type Ref } from 'vue'
 import { useFetch } from './useFetch'
 
+// Composable handling Geocoding API calls and data parsing
 export const useGeocoding = (query: Ref<string>) => {
   const locationData = computed<LocationGeocodingData[] | null>(() => {
     if (!data.value || !data.value.results) return null
 
-    return data.value.results.map((result: Record<string, string | number | string[]>) => {
+    return data.value.results.map((result) => {
       return {
         name: result.name,
         lat: result.latitude,
@@ -17,7 +19,7 @@ export const useGeocoding = (query: Ref<string>) => {
     })
   })
 
-  const { data, error, isLoading, fetchData } = useFetch<any>()
+  const { data, error, isLoading, fetchData } = useFetch<GeocodingResponse>()
 
   const endpoint = 'https://geocoding-api.open-meteo.com/v1/search'
   const params = new URLSearchParams({

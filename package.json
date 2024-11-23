@@ -1,6 +1,6 @@
 {
   "name": "weather-app",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -12,8 +12,8 @@
     "type-check": "vue-tsc --build --force",
     "lint": "eslint . --fix",
     "format": "prettier --write src/",
-    "build-docker-image": "docker build -t weather-app .",
-    "run-docker-container": "docker run -p 8080:8080 --rm weather-app",
+    "build:docker": "docker build -t weather-app .",
+    "run:docker": "docker run -p 8080:8080 --rm weather-app",
     "test:e2e:docker": "run-p serve-and-test --",
     "serve-and-test": "npm run preview & npx playwright test"
   },

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { LocationCoords, WeatherApiParsedResponse } from '@/types'
+import type { LocationCoords, OpenMeteoParsedResponse } from '@/types/appTypes'
 import { ref } from 'vue'
 
 interface Props {
-  weatherData: WeatherApiParsedResponse
+  weatherData: OpenMeteoParsedResponse
   coords: LocationCoords
 }
 

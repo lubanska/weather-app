@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import MainBody from '@/components/MainBody.vue'
-import NavigationBar from './components/NavigationBar.vue'
-import { useWeatherForecast } from './composables/useWeatherForecast'
+import MainBody from '@/components/00-globals/MainBody.vue'
+import NavigationBar from './components/00-globals/NavigationBar.vue'
+import { useOpenMeteo } from './composables'
 
-const { weatherData } = useWeatherForecast()
+const { weatherData } = useOpenMeteo()
 </script>
 
 <template>

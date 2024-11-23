@@ -1,4 +1,6 @@
-export const mockOpenMeteoApiResponse = {
+import type { OpenMeteoResponse, GeocodingResponse } from '../src/types/responseTypes.ts'
+
+export const mockOpenMeteoResponse: Record<string, OpenMeteoResponse> = {
   copenhagen: {
     latitude: 55.6785,
     longitude: 12.570435,
@@ -130,7 +132,7 @@ export const mockOpenMeteoApiResponse = {
   },
 }
 
-export const mockGeocodingApiResponse = {
+export const mockGeocodingResponse: Record<string, GeocodingResponse> = {
   copenhagen: {
     results: [
       {

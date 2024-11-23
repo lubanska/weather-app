@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useWeatherForecast } from '@/composables/useWeatherForecast'
+import { useOpenMeteo } from '@/composables'
 
-const { weatherData } = useWeatherForecast()
+const { weatherData } = useOpenMeteo()
 </script>
 
 <template>

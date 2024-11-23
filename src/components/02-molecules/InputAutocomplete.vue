@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import { useGeocoding } from '@/composables/useGeocoding'
-import { useWeatherForecast } from '@/composables/useWeatherForecast'
-
-import type { LocationGeocodingData } from '@/types'
+import type { LocationGeocodingData } from '@/types/appTypes'
+import { useGeocoding, useOpenMeteo } from '@/composables'
 import { ref } from 'vue'
 
 const searchQuery = ref<string>('')
 
 const { locationData } = useGeocoding(searchQuery)
-const { updateCoords } = useWeatherForecast()
+const { updateCoords } = useOpenMeteo()
 
 const handleModel = (value: LocationGeocodingData | null) => {
   if (value) {

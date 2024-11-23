@@ -2,13 +2,14 @@ import type {
   CurrentWeather,
   DailyWeather,
   LocationCoords,
-  WeatherApiParsedResponse,
-} from '@/types'
+  OpenMeteoParsedResponse,
+} from '@/types/appTypes'
+import type { OpenMeteoResponse } from '@/types/responseTypes'
 import { getWeatherIcon } from '@/utils/getWeatherIcon'
 import { computed, ref, watch } from 'vue'
 import { useFetch } from './useFetch'
 
-const { data, error, isLoading, fetchData } = useFetch<any>()
+const { data, error, isLoading, fetchData } = useFetch<OpenMeteoResponse>()
 
 const coords = ref<LocationCoords>({
   name: 'Copenhagen, Capital Region, Denmark',
@@ -16,8 +17,9 @@ const coords = ref<LocationCoords>({
   long: 12.56553,
 })
 
-export const useWeatherForecast = () => {
-  const weatherData = computed<WeatherApiParsedResponse | null>(() => {
+// Composable handling OpenMeteo API calls and data parsing
+export const useOpenMeteo = () => {
+  const weatherData = computed<OpenMeteoParsedResponse | null>(() => {
     if (!data.value) return null
 
     const current = data.value.current
@@ -41,7 +43,7 @@ export const useWeatherForecast = () => {
         {
           condition: 'UV index',
           icon: 'mdi-sun-wireless',
-          value: daily.uv_index_max[0],
+          value: daily.uv_index_max[0].toString(),
         },
         {
           condition: 'Surface pressure',

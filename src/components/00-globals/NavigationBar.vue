@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import IconDayNight from './IconDayNight.vue'
-import InputAutocomplete from './InputAutocomplete.vue'
+import IconDayNight from '@/components/01-atoms/IconDayNight.vue'
+import InputAutocomplete from '@/components/02-molecules/InputAutocomplete.vue'
 </script>
 
 <template>

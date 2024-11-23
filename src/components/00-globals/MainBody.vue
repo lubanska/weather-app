@@ -1,11 +1,10 @@
 <script lang="ts" setup>
-import CardLoader from './CardLoader.vue'
-import CardWeather from './CardWeather.vue'
-import CardError from './CardError.vue'
+import CardLoader from '@/components/03-organisms/CardLoader.vue'
+import CardWeather from '@/components/03-organisms/CardWeather.vue'
+import CardError from '@/components/03-organisms/CardError.vue'
+import { useOpenMeteo } from '@/composables'
 
-import { useWeatherForecast } from '@/composables/useWeatherForecast'
-
-const { weatherData, coords, isLoading, error } = useWeatherForecast()
+const { weatherData, coords, isLoading, error } = useOpenMeteo()
 </script>
 
 <template>
