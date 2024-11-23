@@ -35,11 +35,12 @@ const handleSearch = (value: string | null) => {
     no-filter
     flat
     hide-details
+    id="inputAutocomplete"
     label="Location"
-    :items="locationData ?? []"
     item-title="title"
     item-value="value"
     variant="solo-filled"
+    :items="locationData ?? []"
     @update:model-value="handleModel($event)"
     @update:search="handleSearch($event)"
   ></v-autocomplete>

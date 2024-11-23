@@ -1,4 +1,4 @@
-body {
+/* body {
   background: linear-gradient(-45deg, #ffcf47, #ff9647, #ff5252, #ffd152);
   background-size: 400% 400%;
   animation: gradient 15s ease infinite;
@@ -20,7 +20,7 @@ body {
 .v-theme--light,
 .v-theme--dark {
   background-color: transparent !important;
-}
+} */
 
 /* Sunny Day
 background: linear-gradient(-45deg, #ffcf47, #ff9647, #ff5252, #ffd152);
