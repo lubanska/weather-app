@@ -1,57 +1,135 @@
-import { test, expect } from '@playwright/test'
+import { test, expect, BrowserContext } from '@playwright/test'
+import { mockGeocodingApiResponse, mockOpenMeteoApiResponse } from './mockResponses.ts'
 
-// See here how to get started:
-// https://playwright.dev/docs/intro
+// HELPERS
+const mockGeocodingAPI = async (context: BrowserContext, response = {}, delay = 0) => {
+  await context.route('https://geocoding-api.open-meteo.com/v1/search*', (route) => {
+    setTimeout(() => {
+      route.fulfill({
+        status: 200,
+        body: JSON.stringify(response),
+        contentType: 'application/json',
+      })
+    }, delay)
+  })
+}
 
-// CORE FUNCTIONALITY
-test('weather app has an input field', async ({ page }) => {
-  await page.goto('https://weather-app-ruby-iota-54.vercel.app/')
-  await expect(page.getByLabel('inputAutocomplete')).toBeVisible()
+const mockOpenMeteoAPI = async (
+  context: BrowserContext,
+  response = {},
+  delay = 0,
+  status = 200,
+) => {
+  await context.route('https://api.open-meteo.com/v1/forecast*', (route) => {
+    setTimeout(() => {
+      route.fulfill({
+        status,
+        body: JSON.stringify(response),
+        contentType: 'application/json',
+      })
+    }, delay)
+  })
+}
+
+test.beforeEach(async ({ page, context }) => {
+  // Set up mocks before navigating to the page
+  await mockGeocodingAPI(context, mockGeocodingApiResponse['berlin'])
+  await mockOpenMeteoAPI(context, mockOpenMeteoApiResponse['copenhagen'], 200)
+
+  // Set up a web address
+  await page.goto('/')
 })
 
-// test('verify the autocomplete feature works', async ({ page }) => {
-//   await page.goto('/')
-//   await expect(page.locator('div.greetings > h1')).toHaveText('You did it!')
-// })
+// CORE FUNCTIONALITY
+test('displays location input field on initial load', async ({ page }) => {
+  await expect(page.getByLabel('Location', { exact: true })).toBeVisible()
+})
 
-// test('input location and verify data is displayed on the screen', async ({ page }) => {
-//   await page.goto('/')
-//   await expect(page.locator('div.greetings > h1')).toHaveText('You did it!')
-// })
+test('autocomplete suggestions show expected location', async ({ page }) => {
+  await page.getByLabel('Location', { exact: true }).fill('ber')
+  await expect(page.getByRole('option', { name: 'Berlin, Land Berlin, Germany' })).toBeVisible()
+})
 
-// test('search for another location to verify data updates accordingly', async ({ page }) => {
-//   await page.goto('/')
-//   await expect(page.locator('div.greetings > h1')).toHaveText('You did it!')
-// })
+test('selecting location displays correct weather data', async ({ page, context }) => {
+  await page.getByLabel('Location', { exact: true }).fill('ber')
 
-// // EDGE CASES
-// test('invalid or nonexistent location', async ({ page }) => {
-//   await page.goto('/')
-//   await expect(page.locator('div.greetings > h1')).toHaveText('You did it!')
-// })
+  // Mock OpenMeteo API Response for Berlin
+  await mockOpenMeteoAPI(context, mockOpenMeteoApiResponse['berlin'])
 
-// test('prevent empty inputs', async ({ page }) => {
-//   await page.goto('/')
-//   await expect(page.locator('div.greetings > h1')).toHaveText('You did it!')
-// })
+  await page.getByRole('option', { name: 'Berlin, Land Berlin, Germany' }).click()
+  await expect(page.getByRole('main')).toContainText('Europe/Berlin')
+})
 
-// test('simulate api error', async ({ page }) => {
-//   await page.goto('/')
-//   await expect(page.locator('div.greetings > h1')).toHaveText('You did it!')
-// })
+test('clearing location input resets to default', async ({ page, context }) => {
+  await page.getByLabel('Location', { exact: true }).fill('ber')
 
-// // UI and A11y
-// test('keyboard navigation', async ({ page }) => {
-//   await page.goto('/')
-//   await expect(page.locator('div.greetings > h1')).toHaveText('You did it!')
-// })
+  // Mock OpenMeteo API Response for Berlin
+  await mockOpenMeteoAPI(context, mockOpenMeteoApiResponse['berlin'])
 
-// test('loader on the weather card', async ({ page }) => {
-//   await page.goto('/')
-//   await expect(page.locator('div.greetings > h1')).toHaveText('You did it!')
-// })
+  await page.getByRole('option', { name: 'Berlin, Land Berlin, Germany' }).click()
+  await expect(page.getByRole('main')).toContainText('Europe/Berlin')
 
-// test('theme synced with day / night', async ({ page }) => {
-//   await page.goto('/')
-//   await expect(page.locator('div.greetings > h1')).toHaveText('You did it!')
-// })
+  // Mock Api Response to default
+  await mockOpenMeteoAPI(context, mockOpenMeteoApiResponse['copenhagen'])
+
+  await page.getByLabel('Clear Location').click()
+  await expect(page.getByLabel('Location', { exact: true })).toBeEmpty()
+
+  await expect(page.getByRole('main')).toContainText('Europe/Copenhagen')
+})
+
+test('changing location updates weather data', async ({ page, context }) => {
+  await page.getByLabel('Location', { exact: true }).fill('ber')
+
+  // Mock OpenMeteo API Response for Berlin
+  await mockOpenMeteoAPI(context, mockOpenMeteoApiResponse['berlin'])
+
+  await page.getByRole('option', { name: 'Berlin, Land Berlin, Germany' }).click()
+  await expect(page.getByRole('main')).toContainText('Europe/Berlin')
+
+  // Mock Api Response
+  await mockGeocodingAPI(context, mockGeocodingApiResponse['paris'])
+  await mockOpenMeteoAPI(context, mockOpenMeteoApiResponse['paris'])
+
+  await page.getByLabel('Location', { exact: true }).fill('par')
+
+  await page.getByRole('option', { name: 'Paris, Île-de-France, France' }).click()
+  await expect(page.getByRole('main')).toContainText('Europe/Paris')
+})
+
+// UI & A11Y
+test('displays loader skeleton while API is loading', async ({ page }) => {
+  await expect(page.locator('.card-loader')).toBeVisible()
+
+  // Wait for the data to load and the loader to disappear
+  await expect(page.locator('.card-loader')).toBeHidden()
+
+  // Check if the weather data has loaded after the delay
+  await expect(page.getByRole('main')).toContainText('Europe/Copenhagen')
+})
+
+test('keyboard navigation in autocomplete dropdown', async ({ page }) => {
+  await page.getByLabel('Location', { exact: true }).fill('ber')
+  await expect(page.getByRole('listbox')).toBeVisible()
+  await page.getByLabel('Location', { exact: true }).press('ArrowUp')
+  const firstOption = page.locator('[role="option"]').nth(0)
+  await expect(firstOption).toHaveClass(/v-list-item--active/)
+
+  const selectedText = await firstOption.textContent()
+  expect(selectedText).not.toBeNull()
+
+  await page.getByLabel('Location', { exact: true }).press('Enter')
+
+  await expect(page.getByLabel('Location', { exact: true })).toHaveValue(selectedText!.trim())
+})
+
+// EDGE CASES
+test('error message shown on API error response', async ({ page, context }) => {
+  // Set up mocks before navigating to the page
+  await mockOpenMeteoAPI(context, mockOpenMeteoApiResponse['copenhagen'], 200, 404)
+
+  // Set up a web address
+  await page.goto('/')
+
+  await expect(page.locator('.card-error')).toBeVisible()
+})

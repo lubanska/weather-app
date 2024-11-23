@@ -7,7 +7,7 @@ defineProps<Props>()
 </script>
 
 <template>
-  <div>
+  <div class="card-error">
     <v-row>
       <v-col align="center">
         <div class="text-overline text-error">Error</div>

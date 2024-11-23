@@ -21,8 +21,6 @@ export const useFetch = <T>() => {
       const result = await response.json()
 
       data.value = result
-
-      console.log(result)
     } catch (err) {
       error.value = err instanceof Error ? err.message : 'Unknown error occurred'
     } finally {

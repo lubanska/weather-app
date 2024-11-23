@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="card-loader">
     <v-row>
       <v-col align="center">
         <v-skeleton-loader type="text" class="w-500"></v-skeleton-loader>
