@@ -25,9 +25,28 @@ Weather App is a smooth and user-friendly **SPA** build with **Vue.js**. The use
 
 ## Project Structure
 
-## Installation
+### Folder structure
 
-### Prerequisites
+```
+.
+├── .vscode                 # Recommended VSC extensions
+├── e2e                     # Playwright tests
+├── src
+│   ├── assets              # CSS and styling
+│   ├── components          # Vue.js components organised with Atomic Design principles
+│   │   ├── 00-globals
+│   │   ├── 01-atoms
+│   │   ├── 02-molecules
+│   │   └── 03-organisms
+│   ├── composables         # Composables
+│   ├── types               # TypeScript types
+│   └── utils               # Helper functions
+└── README.md
+```
+
+### Installation
+
+#### Prerequisites
 
 Make sure you have the following installed:
 
@@ -35,7 +54,7 @@ Make sure you have the following installed:
 - NPM - v9.6.7
 - Docker - v27.3.1
 
-### Setup
+#### Setup
 
 ```bash
 # Clone the repository
@@ -68,25 +87,6 @@ npm run run:docker
 The application will be available at `https://localhost:8080`.
 
 ## How It Works
-
-### Folder structure
-
-```
-.
-├── .vscode                 # Recommended VSC extensions
-├── e2e                     # Playwright tests
-├── src
-│   ├── assets              # CSS and styling
-│   ├── components          # Vue.js components organised with Atomic Design principles
-│   │   ├── 00-globals
-│   │   ├── 01-atoms
-│   │   ├── 02-molecules
-│   │   └── 03-organisms
-│   ├── composables         # Composables
-│   ├── types               # TypeScript types
-│   └── utils               # Helper functions
-└── README.md
-```
 
 ### User Flow
 
